@@ -68,8 +68,10 @@ fi
 
 tar -xzf guacamole-auth-jdbc-${GUACVERSION}.tar.gz
 
+docker network create --internal --attachable guacamole-net
+
 # Start MySQL
-docker run --restart=always --detach --name=mysql --env="MYSQL_ROOT_PASSWORD=$mysqlrootpassword" --publish 3306:3306 mysql
+docker run --restart=always --detach --name=mysql --env="MYSQL_ROOT_PASSWORD=$mysqlrootpassword" --network="guacamole-net" --network-alias=['db'] mysql
 
 # Sleep to let MySQL load (there's probably a better way to do this)
 echo "Waiting 30 seconds for MySQL to load"
